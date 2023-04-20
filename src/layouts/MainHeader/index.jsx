@@ -6,7 +6,7 @@ const MainHeader = () => {
     return (
         <header>
             <div className="header">
-                <h1>TO DO APP</h1>
+                <h1>TO DO APP (REACT)</h1>
                 <Button>ВЫХОД</Button>
             </div>
         </header>
