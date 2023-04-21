@@ -1,9 +1,11 @@
+import React from 'react';
+
 import deletePng from '../../assets/images/delete.png';
 
-const Task = ({ task }) => {
+const Task = ({ task, edit, ...props }) => {
 
     return (
-        <div className="desk_tasks__item">
+        <div className="desk_tasks__item" {...props}>
             <div className="task-wrapper">
                 <div className="task-wrapper_container">
                     <p className="task-wrapper_container__login">
@@ -11,7 +13,7 @@ const Task = ({ task }) => {
                     </p>
                 </div>
 
-                <h5  className="task-wrapper_name">
+                <h5 onClick={() => edit(task)}  className="task-wrapper_name">
                     { task.title }
                 </h5>
 

@@ -1,6 +1,6 @@
-import { React } from "react";
+import { React, useState } from "react";
 
-import { Desk } from "../../components/Desk";
+import { Desk } from "../../components";
 
 const HomePage = () => {
   const statuses =  [
@@ -18,21 +18,37 @@ const HomePage = () => {
         },
       ]
       
-  const tasks = [
+  const [tasks, setTasks] = useState([
     {
+      id: 1,
       status_id: 1,
       title: 'hhhhh',
       description: 'gagagagag'
+    },
+    {
+      id: 2,
+      status_id: 1,
+      title: 'sssss',
+      description: 'gagagagag'
     }
-  ];
-  const users = [];
+  ])
+
+  const updateTasks = tasks => {
+    setTasks(tasks)
+  }
+  // const users = [];
 
   return (
     <div className="todo-app">
       {
         statuses && statuses.map((status) => {
             return (
-              <Desk statusId={status.id} statusTitle={status.name} tasks={tasks} key={status.id}/>
+              <Desk
+                statusId={status.id}
+                statusTitle={status.name}
+                tasks={tasks}
+                updateTasks={updateTasks}
+                key={status.id} />
             );
         })
       }

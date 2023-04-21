@@ -7,7 +7,7 @@ const MainHeader = () => {
         <header>
             <div className="header">
                 <h1>TO DO APP (REACT)</h1>
-                <Button>ВЫХОД</Button>
+                <Button classNameOut="header__button">ВЫХОД</Button>
             </div>
         </header>
     )

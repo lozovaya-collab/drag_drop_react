@@ -1,4 +1,4 @@
-<template>
+{/* <template>
   <div class="content-task" v-if="newTask">
     <Combobox
       v-model:selected="statusId"
@@ -87,10 +87,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.content-task {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-</style>
+ */}
