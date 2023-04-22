@@ -130,7 +130,12 @@ const Desk = ({ statusId, statusTitle, tasks, updateTasks, users }) => {
                 />
             }
             {selectedTask && 
-                <EditTaskPopup isDialog={selectedTask} show={(value) => setSelectedTask(value)} />
+                <EditTaskPopup
+                    isDialog={selectedTask}
+                    show={(value) => setSelectedTask(value)}
+                    user={currentUser.id}
+                    updateTasks={(array) => updateTasks(array)}
+                />
             }
         </>
     )
