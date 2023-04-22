@@ -1,39 +1,11 @@
-{/* <template>
-  <div class="content-task" v-if="newTask">
-    <Combobox
-      v-model:selected="statusId"
-      @update:selected="statusId = $event"
-      v-bind:list="statuses"
-    />
-    <TextInput
-      v-model="title"
-      @update:modelValue="title = $event"
-      :type="'text'"
-      :placeholder="'название'"
-    />
-    <TextArea
-      v-model="description"
-      @update:modelValue="description = $event"
-      :placeholder="'описание'"
-    />
-  </div>
-</template>
+import React from "react";
 
-<script>
-import { Combobox, TextInput, TextArea } from "@/components/UI";
+import { Combobox, TextInput, TextArea } from '../../../components';
 
-export default {
-  name: "CreateTask",
-  props: ["newTask"],
-  emits: ["update:newTask"],
-  components: {
-    Combobox,
-    TextInput,
-    TextArea,
-  },
-  data() {
-    return {
-      statuses: [
+import style from './style.module.scss';
+
+const ContentPopup = ({ newTask, updateTask }) => {
+  const statuses =  [
         {
           id: 1,
           name: "сделать",
@@ -46,45 +18,34 @@ export default {
           id: 3,
           name: "закончено",
         },
-      ],
-    };
-  },
-  computed: {
-    statusId: {
-      get() {
-        return this.newTask.status_id;
-      },
-      set(value) {
-        this.$emit("update:newTask", {
-          ...this.newTask,
-          status_id: value,
-        });
-      },
-    },
-    title: {
-      get() {
-        return this.newTask.title;
-      },
-      set(value) {
-        this.$emit("update:newTask", {
-          ...this.newTask,
-          title: value,
-        });
-      },
-    },
-    description: {
-      get() {
-        return this.newTask.description;
-      },
-      set(value) {
-        this.$emit("update:newTask", {
-          ...this.newTask,
-          description: value,
-        });
-      },
-    },
-  },
-};
-</script>
+  ]
+  
+  const updateValue = (event, prop) => {
+    updateTask({ [prop]: event.target.value})
+  }
 
- */}
+  return (
+    <>
+      {newTask &&
+        <div className={style['content-task']}>
+          <Combobox
+            value={newTask.status_id}
+            onChange={(e) => updateValue(e, 'status_id')}
+            list={statuses}
+          />
+          <TextInput
+            value={newTask.title}
+            onChange={(e) => updateValue(e, 'title')}
+          />
+          <TextArea
+            value={newTask.description}
+            onChange={(e) => updateValue(e, 'description')}
+          />
+        </div>
+      }
+    </>
+  )
+}
+
+export { ContentPopup }
+

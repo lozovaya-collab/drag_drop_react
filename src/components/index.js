@@ -7,10 +7,8 @@ import { Desk } from './Desk';
 import { Task } from './Task';
 import { CreateTaskPopup } from './Task/CreateTaskPopup';
 import { EditTaskPopup } from './Task/EditTaskPopup';
-// import Popup from './Popup';
-// import TextInput from './TextInput';
-// import Combobox from './Combobox';
-// import TextArea from './TextArea';
+import { ContentPopup } from './Task/ContentPopup';
+import { FormAuth } from './FormAuth'
 
 export {
     Button,
@@ -21,5 +19,7 @@ export {
     Desk,
     Task,
     CreateTaskPopup,
-    EditTaskPopup
+    EditTaskPopup,
+    ContentPopup,
+    FormAuth
 }

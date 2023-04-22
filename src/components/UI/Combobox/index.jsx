@@ -19,7 +19,7 @@ const Combobox = ({ value, onChange, list, ...props }) => {
         {list &&
           list.map(option => {
             return (
-              <option key="option.id" value="option.id">
+              <option key={option.id} value={option.id}>
                 { option.name }
               </option>
             )

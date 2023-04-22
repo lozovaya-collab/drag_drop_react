@@ -1,9 +1,12 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+
+import { apiService } from "../../shared/api/swagger/swagger";
 
 import { Button, Task, CreateTaskPopup, EditTaskPopup } from "../../components";
 
-const Desk = ({ statusId, statusTitle, tasks, updateTasks }) => {
+const Desk = ({ statusId, statusTitle, tasks, updateTasks, users }) => {
     let currTask = null;
+    const currentUser = localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"));
     let [selectedStatus, setSelectedStatus] = useState(null);
     let [selectedTask, setSelectedTask] = useState(null);
 
@@ -26,6 +29,12 @@ const Desk = ({ statusId, statusTitle, tasks, updateTasks }) => {
             if (x.id === taskId) {
                 addTaskToArray(currTask, x, cloneTasks);
                 x.status_id = id;
+
+                apiService.tasks.Update(x.id, {
+                    status_id: x.status_id,
+                    description: x.description,
+                    title: x.title,
+                 });
             }
             return x;
         });
@@ -53,6 +62,16 @@ const Desk = ({ statusId, statusTitle, tasks, updateTasks }) => {
         setSelectedStatus(null);
     }
 
+    const deleteTask = (value) => {
+        const id = value;
+        if (id)
+            apiService.tasks.Delete(id).then(() => {
+                apiService.tasks.Get().then((res) => {
+                    updateTasks(res.data);
+                });
+            });
+    }
+
     return (
         <>
             <div
@@ -74,11 +93,18 @@ const Desk = ({ statusId, statusTitle, tasks, updateTasks }) => {
                             return (
                                 <Task
                                     edit={openEditPopup}
+                                    deleteTask={(value) => deleteTask(value)}
                                     onDragStart={e => onDragStart(e, task)}
                                     onDragOver={e => onDragOver(task)}
                                     style={{
                                         top: `${index * 40}px`
                                     }}
+                                    userLogin={task.author_id === currentUser.id ? 
+                                        -1 
+                                        : 
+                                        users.find((item) => item.id === task.author_id) &&
+                                        users.find((item) => item.id === task.author_id).login
+                                    }
                                     draggable="true"
                                     task={task}
                                     key={task.id} />
@@ -97,7 +123,11 @@ const Desk = ({ statusId, statusTitle, tasks, updateTasks }) => {
                 </div>
             </div>
             {selectedStatus && 
-                <CreateTaskPopup isDialog={selectedStatus} show={(value) => setSelectedStatus(value)} />
+                <CreateTaskPopup
+                    isDialog={selectedStatus}
+                    show={(value) => setSelectedStatus(value)}
+                    updateTasks={(array) => updateTasks(array)}
+                />
             }
             {selectedTask && 
                 <EditTaskPopup isDialog={selectedTask} show={(value) => setSelectedTask(value)} />

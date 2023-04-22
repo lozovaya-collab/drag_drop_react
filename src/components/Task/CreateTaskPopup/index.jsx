@@ -1,11 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Popup, Button } from '../../../components';
+import { apiService } from "../../../shared/api/swagger/swagger";
 
-const CreateTaskPopup = ({ isDialog, show }) => {
+import { Popup, Button, ContentPopup } from '../../../components';
+
+const CreateTaskPopup = ({ isDialog, show, updateTasks }) => {
   const closePopup = () => {
     show(false);
   }
+
+  const [task, setTask] = useState({
+    status_id: isDialog,
+    title: "",
+    description: "",
+  })
+
+  const updateTask = (task) => {
+    setTask(task);
+  }
+
+  const saveTask = () => {
+    apiService.tasks.Create(task).then(() => {
+      apiService.tasks
+        .Get()
+        .then((res) => {
+          updateTasks(res.data);
+        })
+        .then(() => {
+          closePopup();
+        });
+    });
+  };
 
   const titleElement = () => {
     return (
@@ -16,9 +41,7 @@ const CreateTaskPopup = ({ isDialog, show }) => {
   const contentElement = () => {
     return (
       <>
-        <div>
-          content
-        </div>
+        <ContentPopup newTask={task} updateTask={(value) => updateTask({...task, ...value})} />
       </>
     )
   }
@@ -27,7 +50,7 @@ const CreateTaskPopup = ({ isDialog, show }) => {
     return (
       <>
         <Button onClick={closePopup} type={'text'}>ОТМЕНА</Button>
-        <Button onClick={closePopup}>СОХРАНИТЬ</Button>
+        <Button onClick={saveTask}>СОХРАНИТЬ</Button>
       </>
     )
   }
@@ -43,61 +66,3 @@ const CreateTaskPopup = ({ isDialog, show }) => {
 }
 
 export { CreateTaskPopup }
-
-
-// <script>
-// import { apiService } from "../../../shared/api/swagger/swagger";
-
-// import ContentPopup from "../ContentPopup";
-// import { Popup, Button } from "@/components/UI";
-
-// export default {
-//   name: "CreateTaskPopup",
-//   props: ["statusId", "tasks", "isOpen"],
-//   components: {
-//     ContentPopup,
-//     Popup,
-//     Button,
-//   },
-//   data() {
-//     return {
-//       task: null,
-//     };
-//   },
-//   computed: {
-//     isDialog: {
-//       get() {
-//         return this.isOpen;
-//       },
-//       set(value) {
-//         this.$emit("update:isOpen", value);
-//       },
-//     },
-//   },
-//   methods: {
-//     closePopup() {
-//       this.task = null;
-//       this.isDialog = false;
-//     },
-//     saveTask() {
-//       apiService.tasks.Create(this.task).then(() => {
-//         apiService.tasks
-//           .Get()
-//           .then((res) => {
-//             this.$emit("update:tasks", res.data);
-//           })
-//           .then(() => {
-//             this.closePopup();
-//           });
-//       });
-//     },
-//   },
-//   mounted() {
-//     this.task = {
-//       status_id: this.statusId,
-//       title: null,
-//       description: null,
-//     };
-//   },
-// };
-// </script>
